@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MathBalls</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style/main.css">
 </head>
 
 <body>
@@ -13,7 +13,7 @@
         </div>
 
         <div class="game-container">
-            <canvas id="canvas" width="1024" height="768"></canvas>
+            <canvas id="canvas" width="990" height="720"></canvas>
 
             <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce venenatis dignissim sem. Sed gravida gravida tempus. Aenean sed ultrices orci. Vestibulum vitae elit ut justo maximus lobortis. Curabitur placerat et dolor at euismod. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sollicitudin velit libero, sed volutpat est vehicula et. Phasellus eu purus ac ligula faucibus porttitor vel non nulla. Vivamus finibus porttitor neque sed euismod. Nullam porta bibendum tellus tempus molestie. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec tempus, ex ut facilisis sagittis, massa enim egestas magna, eu varius purus metus eget eros. Proin vestibulum pellentesque est ac facilisis. In eu sollicitudin risus.
@@ -26,8 +26,15 @@
     </div>
 
 
-    <script src="draw.js"></script>
-    <script src="main.js"></script>
+    <script src="js/game/util/vector2d.js"></script>
+    <script src="js/game/util/anim.js"></script>
+    <script src="js/game/util/ball.js"></script>
+    <script src="js/game/util/pathfinder.js"></script>
+    <script src="js/game/graphic/draw.js"></script>
+    <script src="js/game/graphic/grid.js"></script>
+    <script src="js/game/engine/input-manager.js"></script>
+    <script src="js/game/engine/game-manager.js"></script>
+    <script src="js/game/main.js"></script>
 
 </body>
 </html>

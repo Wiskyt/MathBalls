@@ -4,11 +4,10 @@
 function Grid(width, height) {
     this.width = width;
     this.height = height;
-    this.cells = this.empty();
-    createGrid();
+    this.cells = this.emptyGrid();
 }
 
-Grid.prototype.empty = function () {
+Grid.prototype.emptyGrid = function () {
     var cells = [];
 
     for (var x = 0; x < this.width; x++) {
@@ -22,9 +21,6 @@ Grid.prototype.empty = function () {
     return cells;
 };
 
-Grid.prototype.createGrid(strokeWidth) {
-   // var pX = (CANVAS_WIDTH - (TILE_SIZE * this.width)) / (this.width - 2);
-    for (var x = TILE_SIZE; x < (this.width * TILE_SIZE); x += TILE_SIZE) {
-
-    }
-}
+Grid.prototype.addBall = function(ball) {
+    this.cells[ball.cell.x][ball.cell.y] = ball;
+};
