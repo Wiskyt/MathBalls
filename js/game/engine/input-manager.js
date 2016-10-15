@@ -17,7 +17,7 @@ function InputManager(canvas) {
     this.htmlTop = html.offsetTop;
     this.htmlLeft = html.offsetLeft;
 
-
+    this.switchFocus = false;
     this.startTileSelected = new Vector2D(-1, -1);
     this.endTileSelected = new Vector2D(-1, -1);
 
@@ -31,38 +31,38 @@ InputManager.prototype.onClick = function(event) {
         y = event.pageY - this.pad.top;*/
     var mouse = this.getMouse(event);
 
-    var cellX = Math.ceil(mouse.x / TILE_SIZE) - 1;
-    var cellY = Math.ceil(mouse.y / TILE_SIZE) - 1;
+    var cellX = Math.floor(mouse.x / TILE_SIZE);
+    var cellY = Math.floor(mouse.y / TILE_SIZE);
 
-    //console.log(cellX + " / " + cellY);
-
-    if (this.startTileSelected.x >= 0) {
+    if (this.switchFocus) {
+        this.startTileSelected.copy(this.endTileSelected);
+        this.endTileSelected.reset();
+        this.switchFocus = false;
+    }
+    else if (this.startTileSelected.x >= 0) {
         if (this.startTileSelected.compare(cellX, cellY)) {
             this.startTileSelected.reset();
             this.endTileSelected.reset();
         } else {
-            if (this.endTileSelected.x >= 0) {
-                if (this.endTileSelected.compare(cellX, cellY)) {
-                    // Start pathfinding
+            if (this.endTileSelected.x >= 0 && gameManager.draw.path != null &&
+                this.endTileSelected.compare(cellX, cellY) &&
+                (gameManager.grid.cells[cellX][cellY] == null || gameManager.grid.cells[cellX][cellY].smallie)) {
+                    if (gameManager.grid.isSmallieBallThere(cellX, cellY)) {
+                        gameManager.moveSmallie(cellX, cellY);
+                    }
 
                     var path = gameManager.pathfinder.find(gameManager.inputManager.startTileSelected, gameManager.inputManager.endTileSelected);
 
-                    if (path == null) {
-
-                    } else {
-                        gameManager.moveBall(gameManager.inputManager.startTileSelected , path);
+                    if (path != null) {
+                        gameManager.moveBall(gameManager.inputManager.startTileSelected, path);
                     }
-
                     gameManager.inputManager.startTileSelected.reset();
                     gameManager.inputManager.endTileSelected.reset();
-                } else {
-                    this.endTileSelected.set(cellX, cellY);
-                }
-            } else {
-                this.endTileSelected.set(cellX, cellY);
+
             }
         }
-    } else if (gameManager.grid.cells[cellX][cellY] != null) {
+    } else if (gameManager.grid.cells[cellX][cellY] != null && !gameManager.grid.cells[cellX][cellY].smallie  &&
+                !(gameManager.grid.cells[cellX][cellY].moving || gameManager.grid.cells[cellX][cellY].blobbing)) {
         this.startTileSelected.set(cellX, cellY);
     }
 
@@ -72,19 +72,23 @@ InputManager.prototype.onClick = function(event) {
 InputManager.prototype.onMove = function(event) {
     var mouse = this.getMouse(event);
 
-    var cellX = Math.ceil(mouse.x / TILE_SIZE) - 1;
-    var cellY = Math.ceil(mouse.y / TILE_SIZE) - 1;
+    var cellX = Math.floor(mouse.x / TILE_SIZE);
+    var cellY = Math.floor(mouse.y / TILE_SIZE);
 
     var change = false;
 
-    //console.log(cellX + " / " + cellY);
     if (this.startTileSelected.x >= 0 && !this.startTileSelected.compare(cellX, cellY)) {
         if (!this.endTileSelected.compare(cellX, cellY)) {
             this.endTileSelected.set(cellX, cellY);
-            // Pathfind
+            if (gameManager.grid.isGrownBallThere(cellX, cellY)) {
+                this.switchFocus = true;
+                gameManager.resetPath();
+            } else {
+                var path = gameManager.pathfinder.find(gameManager.inputManager.startTileSelected, gameManager.inputManager.endTileSelected);
+                gameManager.newPath(path);
+                this.switchFocus = false;
+            }
             change = true;
-            var path = gameManager.pathfinder.find(gameManager.inputManager.startTileSelected, gameManager.inputManager.endTileSelected);
-            gameManager.newPath(path);
         }
     }
 

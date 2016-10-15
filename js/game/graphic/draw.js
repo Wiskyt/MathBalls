@@ -4,13 +4,13 @@
 
 function Draw(ctx) {
     this.ctx = ctx;
-    console.log(ctx.scale);
+    this.ctx.textAlign = "center";
     this.path = null;
     this.valid = false; // when set to false, the canvas will redraw everything
 }
 
 Draw.prototype.draw = function () {
-    if (!this.validate) {
+    if (!this.valid) {
         this.ctx.strokeStyle = "#CDC1B4";
         this.ctx.fillStyle = "#FAF8EF";
 
@@ -23,7 +23,7 @@ Draw.prototype.draw = function () {
             this.drawSelectedTile(gameManager.inputManager.startTileSelected.x, gameManager.inputManager.startTileSelected.y, 0);
         }
         if (gameManager.inputManager.endTileSelected.x >= 0) {
-            this.drawSelectedTile(gameManager.inputManager.endTileSelected.x, gameManager.inputManager.endTileSelected.y, this.path == null ? 2 : 1);
+            this.drawSelectedTile(gameManager.inputManager.endTileSelected.x, gameManager.inputManager.endTileSelected.y, gameManager.inputManager.switchFocus ? 3 : this.path == null ? 2 : 1);
         }
 
 
@@ -45,13 +45,20 @@ Draw.prototype.drawAllBalls = function () {
 Draw.prototype.drawBall = function (ball) {
     this.ctx.beginPath();
     this.ctx.fillStyle = ball.color;
-
-    this.ctx.ellipse(ball.pos.x, ball.pos.y, 30 + ball.speedEffect.x, 30 + ball.speedEffect.y, 0, 0, 2 * Math.PI);
+    this.ctx.ellipse(ball.pos.x, ball.pos.y, ball.radius + ball.speedEffect.x, ball.radius + ball.speedEffect.y, 0, 0, 2 * Math.PI);
     this.ctx.fill();
 
-    //this.ctx.fillStyle = "#ffffff";
-    this.ctx.fillText(""+ ball.value, ball.pos.x, ball.pos.y);
-  //  this.ctx.fill();
+    var h = 0;
+    if (ball.smallie) {
+        this.ctx.font = "12px serif";
+        h = 12;
+    } else {
+        this.ctx.font = "24px serif";
+        h = 24;
+    }
+
+    this.ctx.fillStyle = "#000000";
+    this.ctx.fillText("" + ball.value, ball.pos.x, ball.pos.y + h / 4);
 };
 
 Draw.prototype.drawSelectedTile = function(x, y, colorNumber) {
@@ -65,6 +72,9 @@ Draw.prototype.drawSelectedTile = function(x, y, colorNumber) {
             break;
         case 2:
             this.ctx.strokeStyle = "#6F4242";
+            break;
+        case 3:
+            this.ctx.strokeStyle = "#e59400";
             break;
     }
 

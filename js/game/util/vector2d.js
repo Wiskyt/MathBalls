@@ -43,3 +43,13 @@ Vector2D.prototype.toDirectionalVector = function(target) {
     if (target.y - this.y > 0) rV.y = 1; else if (target.y - this.y < 0) rV.y = -1;
     return rV;
 };
+
+Vector2D.prototype.copy = function (target) {
+    this.x = target.x;
+    this.y = target.y;
+};
+
+Vector2D.prototype.add = function (v) {
+    this.x += v.x;
+    this.y += v.y;
+};

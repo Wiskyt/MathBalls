@@ -68,7 +68,7 @@ Pathfinder.prototype.find = function(vStart, vEnd) {
 
         for(i=0; i<neighbors.length;i++) {
             var neighbor = neighbors[i];
-            if(neighbor.status == "closed" || gameManager.grid.cells[neighbor.pos.x][neighbor.pos.y] != null) {
+            if(neighbor.status == "closed" || (gameManager.grid.cells[neighbor.pos.x][neighbor.pos.y] != null && !gameManager.grid.cells[neighbor.pos.x][neighbor.pos.y].smallie)) {
                 // not a valid node to process, skip to next neighbor
                 continue;
             }
