@@ -1,6 +1,6 @@
-#TODO
-- [] Test
-- [] Another test
+# TODO
+- [ ] Test
+- [ ] Another test
 
-#New category
-- [] To do list are great
+## New category
+- [ ] To do list are great
